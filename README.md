@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/SebastianTs/adventOfCode2017.svg?branch=master)](https://travis-ci.org/SebastianTs/adventOfCode2017) [![Go Report Card](https://goreportcard.com/badge/github.com/SebastianTs/adventOfCode2017)]
+[![Build Status](https://travis-ci.org/SebastianTs/adventOfCode2017.svg?branch=master)](https://travis-ci.org/SebastianTs/adventOfCode2017) ![Go Report Card](https://goreportcard.com/badge/github.com/SebastianTs/adventOfCode2017)
 
 # Advent of Code 2017
 
