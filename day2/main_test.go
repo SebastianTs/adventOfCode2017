@@ -59,8 +59,8 @@ func Test_checksum(t *testing.T) {
 		args    args
 		wantSum int
 	}{
-		{"example1", args{rowChecksum, [][]int{[]int{5, 1, 9, 5}, []int{7, 5, 3}, []int{2, 4, 6, 8}}}, 18},
-		{"example2", args{rowChecksumEven, [][]int{[]int{5, 9, 2, 8}, []int{9, 4, 7, 3}, []int{3, 8, 6, 5}}}, 9},
+		{"example1", args{rowChecksum, [][]int{{5, 1, 9, 5}, {7, 5, 3}, {2, 4, 6, 8}}}, 18},
+		{"example2", args{rowChecksumEven, [][]int{{5, 9, 2, 8}, {9, 4, 7, 3}, {3, 8, 6, 5}}}, 9},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -80,7 +80,7 @@ func Test_parseInput(t *testing.T) {
 		args args
 		want [][]int
 	}{
-		{"smallinput", args{"./smallinput"}, [][]int{[]int{5, 1, 9, 5}, []int{7, 5, 3}, []int{2, 4, 6, 8}}},
+		{"smallinput", args{"./smallinput"}, [][]int{{5, 1, 9, 5}, {7, 5, 3}, {2, 4, 6, 8}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
