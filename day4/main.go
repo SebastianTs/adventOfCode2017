@@ -27,27 +27,24 @@ func countValid(fn func([]string) bool, input [][]string) (sum int) {
 }
 
 func isValid(s []string) bool {
-	count := make(map[string]int)
+	count := make(map[string]bool)
 	for _, e := range s {
-		count[e]++
-	}
-	for _, v := range count {
-		if v > 1 {
+		if count[e] {
 			return false
 		}
+		count[e] = true
 	}
 	return true
 }
 
 func isValidWithoutAnagram(s []string) bool {
-	count := make(map[string]int)
+	count := make(map[string]bool)
 	for _, e := range s {
-		count[sortString(e)]++
-	}
-	for _, v := range count {
-		if v > 1 {
+		cur := sortString(e)
+		if count[cur] {
 			return false
 		}
+		count[cur] = true
 	}
 	return true
 }
