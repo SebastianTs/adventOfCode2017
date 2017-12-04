@@ -32,6 +32,7 @@ func isValid(s []string) bool {
 		if count[e] {
 			return false
 		}
+		count[e] = true
 	}
 	return true
 }
