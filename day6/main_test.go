@@ -80,7 +80,7 @@ func Test_hasCycle(t *testing.T) {
 		wantCount  int
 		wantCycles int
 	}{
-		{"example1", args{[]int{0, 2, 7, 0}}, 5,4},
+		{"example1", args{[]int{0, 2, 7, 0}}, 5, 4},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
