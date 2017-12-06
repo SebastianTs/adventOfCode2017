@@ -48,28 +48,6 @@ func Test_getMaxIdx(t *testing.T) {
 	}
 }
 
-func Test_isEqual(t *testing.T) {
-	type args struct {
-		a []int
-		b []int
-	}
-	tests := []struct {
-		name string
-		args args
-		want bool
-	}{
-		{"equal", args{[]int{0, 2, 7, 0}, []int{0, 2, 7, 0}}, true},
-		{"notequal", args{[]int{1, 2, 3, 4}, []int{0, 2, 7, 0}}, false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := isEqual(tt.args.a, tt.args.b); got != tt.want {
-				t.Errorf("isEqual() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_hasCycle(t *testing.T) {
 	type args struct {
 		vs []int

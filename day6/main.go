@@ -16,27 +16,25 @@ func main() {
 
 func hasCycle(vs []int) (count, cycles int) {
 	seen := make(map[string]int)
-	n := 0
-	for {
+	for n := 0; ; n++ {
 		cur := fmt.Sprint(balance(vs))
 		if v, ok := seen[cur]; ok {
 			return n + 1, n - v
 		}
 		seen[cur] = n
-		n++
 	}
 }
 
-func isEqual(a, b []int) bool {
-	if len(a) != len(b) {
-		return false
+func balance(vs []int) []int {
+	maxIdx := getMaxIdx(vs)
+	i := (maxIdx + 1) % len(vs)
+	n := vs[maxIdx]
+	vs[maxIdx] = 0
+	for ; n > 0; n-- {
+		vs[i]++
+		i = (i + 1) % len(vs)
 	}
-	for i, v := range a {
-		if v != b[i] {
-			return false
-		}
-	}
-	return true
+	return vs
 }
 
 func getMaxIdx(vs []int) (max int) {
@@ -48,20 +46,6 @@ func getMaxIdx(vs []int) (max int) {
 		}
 	}
 	return
-}
-
-func balance(vs []int) []int {
-	maxIdx := getMaxIdx(vs)
-	i := (maxIdx + 1) % len(vs)
-	n := vs[maxIdx]
-	vs[maxIdx] = 0
-	for n > 0 {
-		vs[i]++
-		n--
-		i = (i + 1) % len(vs)
-	}
-	return vs
-
 }
 
 func parseInput(file string) []int {
