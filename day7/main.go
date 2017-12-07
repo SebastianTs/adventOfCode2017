@@ -10,13 +10,8 @@ import (
 )
 
 func main() {
-	nodes := parseInput("./input_sorted")
-
-	nodes = connect(nodes)
-	fmt.Println(isRoot(nodes))
-	fmt.Println(findInbalance(isRoot(nodes)))
-	//fmt.Println(calcBalance(isRoot(nodes)))
-
+	nodes := parseInput("./input")
+	fmt.Printf("The rootnode is: %s\n", isRoot(nodes).name)
 }
 
 type node struct {
@@ -38,57 +33,6 @@ func isRoot(nodes []node) node {
 		}
 	}
 	return node{}
-}
-
-func findInbalance(n node) (node, bool) {
-	subtrees := make([]int, len(n.childs))
-	help := make(map[int]int)
-	for i := range n.childs {
-		subtrees[i] = totalWeight(n.childs[i])
-		help[subtrees[i]]++
-	}
-	for v, k := range help {
-		if k == len(n.childs) {
-			return node{}, false // subtree is balanced
-		}
-		if k == 1 {
-			for i := range n.childs {
-				if v == subtrees[i] { // TODO use map here
-					return n.childs[i], true
-				}
-			}
-		}
-
-	}
-	return node{}, false
-}
-
-func calcBalance(n node) int {
-	pre := node{}
-	found := false
-	node := n
-	for !found {
-		pre = node
-		node, found = findInbalance(n)
-	}
-	weight := 0
-	for i, v := range pre.childs {
-		weight = totalWeight(v)
-		diff := totalWeight(pre.childs[(i+1)%len(pre.childs)]) - weight
-		if diff != 0 {
-			return diff
-		}
-	}
-
-	return weight
-}
-
-func totalWeight(n node) int {
-	weight := n.weight
-	for i := range n.childs {
-		weight += totalWeight(n.childs[i])
-	}
-	return weight
 }
 
 func parseInput(file string) []node {
@@ -138,29 +82,4 @@ func parseInput(file string) []node {
 		}
 	}
 	return out
-}
-
-func connect(ns []node) []node {
-	root := isRoot(ns)
-
-	for i := range root.childs {
-		if len(root.childs[i].childs) == 0 {
-			for j := range ns {
-				if ns[j].name == root.childs[i].name {
-					root.childs[i] = ns[j]
-				}
-			}
-		}
-	}
-	return ns
-}
-
-func (n node) print() {
-	fmt.Println(n.name)
-	for i := range n.childs {
-		for j := 0; j < i+1; j++ {
-			fmt.Print(" ")
-		}
-		n.childs[i].print()
-	}
 }
