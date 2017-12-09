@@ -10,34 +10,90 @@ import (
 )
 
 func main() {
-	nodes := parseInput("./input")
-	fmt.Printf("The rootnode is: %s\n", isRoot(nodes).name)
+	tree := parseInput("./input")
+	root := root(tree)
+	fmt.Printf("The root node is %s\n", root)
+	size, wrongNode := balance(root, tree)
+	fmt.Printf("The correct weight of %s is %d\n", wrongNode, size)
 }
 
-type node struct {
-	name   string
-	weight int
-	childs []node
+type graph struct {
+	nodes map[string]int
+	edges map[string][]string
 }
 
-func isRoot(nodes []node) node {
-	incoming := make(map[string]bool)
-	for _, v := range nodes {
-		for _, n := range v.childs {
-			incoming[n.name] = true
+func root(g graph) string {
+	inc := make(map[string]bool)
+	for _, list := range g.edges {
+		for _, item := range list {
+			inc[item] = true
 		}
 	}
-	for _, v := range nodes {
-		if _, ok := incoming[v.name]; !ok {
-			return v
+	for node := range g.nodes {
+		if !inc[node] {
+			return node
 		}
 	}
-	return node{}
+	return ""
 }
 
-func parseInput(file string) []node {
-	out := make([]node, 0)
-	adj := make(map[string][]string)
+func weight(node string, g graph) int {
+	w := g.nodes[node]
+	for _, child := range g.edges[node] {
+		w += weight(child, g)
+	}
+	return w
+}
+
+func findInbalance(node string, g graph) string {
+	childs := make(map[int][]string)
+	for _, child := range g.edges[node] {
+		w := weight(child, g)
+		childs[w] = append(childs[w], child)
+	}
+	for _, v := range childs {
+		if len(v) == 1 {
+			return v[0]
+		}
+	}
+	return ""
+}
+
+func balance(node string, g graph) (int, string) {
+	next := node
+	visited := make([]string, 0)
+	for next != "" {
+		visited = append(visited, next)
+		next = findInbalance(next, g)
+	}
+	last := len(visited) - 1
+	for _, sibling := range g.edges[visited[last-1]] {
+		if sibling != visited[last] {
+			correct := weight(sibling, g)
+			wrong := weight(visited[last], g)
+			diff := correct - wrong
+			return g.nodes[visited[last]] + diff, visited[last]
+		}
+	}
+	return 0, ""
+}
+
+func drawDot(node string, g graph) string {
+	s := "digraph day7 {\n"
+	s += "rankdir=LR;\n"
+	for k, v := range g.edges {
+		for _, i := range v {
+			s += fmt.Sprintf("%s [label=\"%s,%d\\n%d\"];", i, i, g.nodes[i], weight(i, g))
+			s += fmt.Sprintf("%s -> %s;\n", k, i)
+		}
+	}
+	s += "}"
+	return s
+}
+
+func parseInput(file string) graph {
+	nodes := make(map[string]int)
+	edges := make(map[string][]string)
 
 	fileHandle, err := os.Open(file)
 	if err != nil {
@@ -60,26 +116,12 @@ func parseInput(file string) []node {
 		weight, err := strconv.Atoi(token[1])
 
 		if len(token) > 3 {
-			adj[name] = token[3:]
+			edges[name] = token[3:]
 		}
 		if err != nil {
 			log.Fatal(err)
 		}
-		out = append(out, node{name, weight, nil})
+		nodes[name] = weight
 	}
-
-	for i := range out {
-		for node, adjList := range adj {
-			if node == out[i].name {
-				for j := range out {
-					for _, n := range adjList {
-						if n == out[j].name {
-							out[i].childs = append(out[i].childs, out[j])
-						}
-					}
-				}
-			}
-		}
-	}
-	return out
+	return graph{nodes, edges}
 }

@@ -1,0 +1,15 @@
+digraph day7 {
+rankdir=LR;
+gyxo [label="gyxo,61\n61"];ugml -> gyxo;
+ebii [label="ebii,61\n61"];ugml -> ebii;
+jptl [label="jptl,61\n61"];ugml -> jptl;
+ktlj [label="ktlj,57\n57"];fwft -> ktlj;
+cntj [label="cntj,57\n57"];fwft -> cntj;
+xhth [label="xhth,57\n57"];fwft -> xhth;
+pbga [label="pbga,66\n66"];padx -> pbga;
+havc [label="havc,66\n66"];padx -> havc;
+qoyq [label="qoyq,66\n66"];padx -> qoyq;
+ugml [label="ugml,68\n251"];tknk -> ugml;
+padx [label="padx,45\n243"];tknk -> padx;
+fwft [label="fwft,72\n243"];tknk -> fwft;
+}
