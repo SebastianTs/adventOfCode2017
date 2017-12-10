@@ -3,20 +3,25 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 )
 
-const listSize = 256
+const (
+	listSize = 256
+	block    = 16
+)
 
 func main() {
-	seed := parseInput("./input")
+	seed, s, err := parseInput("./input")
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(2)
+	}
 	list := knot(seed)
 	fmt.Printf("The solution to puzzle part1 is: %d \n", (list[0] * list[1]))
-	s := parseInputByte("./input")
 	fmt.Printf("The solution to puzzle part2 is: %x \n", knotByte(s))
 
 }
@@ -46,12 +51,17 @@ func revSubList(s, l int, list []int) []int {
 	return list
 }
 
-func parseInput(file string) []int {
+func parseInput(file string) ([]int, []byte, error) {
 	out := (make([]int, 0))
 	fileHandle, err := os.Open(file)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(2)
+		return []int{}, []byte{}, err
+	}
+
+	b := make([]byte, 0)
+	_, err = fileHandle.Read(b)
+	if err != nil {
+		return []int{}, []byte{}, err
 	}
 	defer fileHandle.Close()
 
@@ -67,22 +77,15 @@ func parseInput(file string) []int {
 			out = append(out, value)
 		}
 	}
-	return out
-}
-
-func parseInputByte(file string) []byte {
-	b, err := ioutil.ReadFile(file)
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(2)
-	}
-	for _, v := range []byte{17, 31, 73, 47, 23} {
-		b = append(b, v)
-	}
-	return b
+	return out, b, nil
 }
 
 func knotByte(ls []byte) []byte {
+
+	for _, v := range []byte{17, 31, 73, 47, 23} {
+		ls = append(ls, v)
+	}
+
 	list := make([]byte, listSize)
 	for i := range list {
 		list[i] = byte(i)
@@ -100,16 +103,20 @@ func knotByte(ls []byte) []byte {
 	return list
 }
 
+func knotString(s string) string {
+	return fmt.Sprintf("%x", knotByte([]byte(s)))
+}
+
 func sToDense(sparse []byte) (dense []byte) {
-	for i := 0; i < 16; i++ {
-		dense = append(dense, sToDenseShort(sparse[i*16:]))
+	for i := 0; i < block; i++ {
+		dense = append(dense, sToDenseBlock(sparse[i*block:]))
 	}
 	return dense
 }
 
-func sToDenseShort(sparse []byte) (dense byte) {
+func sToDenseBlock(sparse []byte) (dense byte) {
 	var res byte
-	for j := 0; j < 16; j++ {
+	for j := 0; j < block; j++ {
 		res ^= sparse[j]
 	}
 	return res

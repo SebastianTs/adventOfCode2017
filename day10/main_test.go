@@ -50,7 +50,7 @@ func Test_knot(t *testing.T) {
 	}
 }
 */
-func Test_sToDenseShort(t *testing.T) {
+func Test_sToDenseBlock(t *testing.T) {
 	type args struct {
 		sparse []byte
 	}
@@ -59,12 +59,35 @@ func Test_sToDenseShort(t *testing.T) {
 		args      args
 		wantDense byte
 	}{
-		{"short", args{[]byte{65, 27, 9, 1, 4, 3, 40, 50, 91, 7, 6, 0, 2, 5, 68, 22}}, byte(64)},
+		{"ExampleBlock", args{[]byte{65, 27, 9, 1, 4, 3, 40, 50, 91, 7, 6, 0, 2, 5, 68, 22}}, byte(64)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotDense := sToDenseShort(tt.args.sparse); !reflect.DeepEqual(gotDense, tt.wantDense) {
+			if gotDense := sToDenseBlock(tt.args.sparse); !reflect.DeepEqual(gotDense, tt.wantDense) {
 				t.Errorf("sToDenseShort() = %v, want %v", gotDense, tt.wantDense)
+			}
+		})
+	}
+}
+
+func Test_knotString(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{"emptyString", args{""}, "a2582a3a0e66e6e86e3812dcb672a272"},
+		{"AoC2017String", args{"AoC 2017"}, "33efeb34ea91902bb2f59c9920caa6cd"},
+		{"OneToThree", args{"1,2,3"}, "3efbe78a8d82f29979031a4aa0b16a9d"},
+		{"OneToFour", args{"1,2,4"}, "63960835bcdc130f0b66d7ff4f6a5a8e"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := knotString(tt.args.s); got != tt.want {
+				t.Errorf("knotString() = %v, want %v", got, tt.want)
 			}
 		})
 	}
