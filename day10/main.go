@@ -82,9 +82,7 @@ func parseInput(file string) ([]int, []byte, error) {
 
 func knotByte(ls []byte) []byte {
 
-	for _, v := range []byte{17, 31, 73, 47, 23} {
-		ls = append(ls, v)
-	}
+	ls = append(ls, []byte{17, 31, 73, 47, 23}...)
 
 	list := make([]byte, listSize)
 	for i := range list {
