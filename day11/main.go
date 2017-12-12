@@ -3,14 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"image/color"
 	"log"
 	"os"
 	"strings"
-
-	"gonum.org/v1/plot"
-	"gonum.org/v1/plot/plotter"
-	"gonum.org/v1/plot/vg"
 )
 
 func main() {
@@ -21,13 +16,8 @@ func main() {
 
 func distance(steps []string) (dist, max int) {
 
-	p, _ := plot.New()
-	p.Title.Text = "Way plotted"
-	p.Add(plotter.NewGrid())
-	pts := make(plotter.XYZs, len(steps))
-
 	var x, y, z int = 0, 0, 0
-	for i, step := range steps {
+	for _, step := range steps {
 		switch step {
 		case "n":
 			y++
@@ -50,20 +40,11 @@ func distance(steps []string) (dist, max int) {
 		default:
 		}
 
-		pts[i].X = float64(x)
-		pts[i].Y = float64(y)
-		pts[i].Z = float64(z)
 		dist = (abs(x) + abs(y) + abs(z)) / 2
 		if max < dist {
 			max = dist
 		}
 	}
-	l, _ := plotter.NewLine(pts)
-	l.LineStyle.Width = vg.Points(1)
-	l.LineStyle.Color = color.RGBA{B: 255, A: 255}
-	p.Add(l)
-	p.Save(4*vg.Inch, 4*vg.Inch, "points.png")
-
 	return
 }
 
