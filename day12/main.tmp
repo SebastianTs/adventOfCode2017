@@ -1,0 +1,119 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+	"strings"
+)
+
+func main() {
+	graph := parseInput("./input")
+	zeroSize, size := Solve(graph)
+	fmt.Printf("The group that program 0 can talk to has %d programs.\n", zeroSize)
+	fmt.Printf("There are %d groups of programs\n", size)
+}
+
+type graph struct {
+	nodes []int
+	edges [][2]int
+}
+
+type part map[int]bool
+
+func Solve(g graph) (maxSize, size int) {
+	parts := make([]part, 0)
+	for _, edge := range g.edges {
+		inSet := false
+		//if parts contains edge[0] or edge[1] add the other edge to the set
+		//lookup edges in parts
+		for i := range parts {
+			_, ok1 := parts[i][edge[0]]
+			_, ok2 := parts[i][edge[1]]
+			if ok1 || ok2 {
+				parts[i][edge[1]] = true
+				parts[i][edge[0]] = true
+				inSet = true
+			}
+			if inSet {
+				break
+			}
+		}
+		if !inSet {
+			//edge not in parts, add it
+			m := make(map[int]bool)
+			m[edge[0]] = true
+			m[edge[1]] = true
+			parts = append(parts, m)
+		}
+	}
+	partsUnion := make([]part, 0)
+	//union of parts
+	for i := range parts{
+		for j := range parts{
+			//if set is not in union add it !
+			for set := range partsUnion{
+				
+			}
+		}
+	}
+
+	for _, part := range partsUnion {
+		if part[0] {
+			maxSize = len(part)
+		}
+	}
+	return maxSize, len(partsUnion)
+}
+
+func union(s1, s2 map[int]bool) map[int]bool {
+	union := map[int]bool{}
+	for k := range s1 {
+		union[k] = true
+	}
+	for k := range s2 {
+		union[k] = true
+	}
+	return union
+}
+
+func parseInput(file string) graph {
+	nodes := make([]int, 0)
+	edges := make([][2]int, 0)
+
+	fileHandle, err := os.Open(file)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(2)
+	}
+	defer fileHandle.Close()
+
+	s := bufio.NewScanner(fileHandle)
+
+	for s.Scan() {
+		line := s.Text()
+		t := bufio.NewScanner(strings.NewReader(line))
+		t.Split(bufio.ScanWords)
+		token := make([]string, 0)
+		for t.Scan() {
+			token = append(token, strings.Trim(t.Text(), ","))
+		}
+
+		n, err := strconv.Atoi(token[0])
+		if err != nil {
+			log.Fatal(err)
+		}
+		nodes = append(nodes, n)
+		for _, t := range token[2:] {
+			edge, err := strconv.Atoi(t)
+			if err != nil {
+				log.Fatal(err)
+			}
+			edges = append(edges, [2]int{n, edge})
+		}
+
+	}
+	return graph{nodes, edges}
+}
