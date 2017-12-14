@@ -17,7 +17,6 @@ type tuple struct {
 }
 
 func createSpiral(n int) [][]int {
-	//                Right, Up, Left, Down
 	var dir = []tuple{{1, 0}, {0, 1}, {-1, 0}, {0, -1}}
 
 	size := int(math.Sqrt(float64(n)))
@@ -53,7 +52,6 @@ func createSpiral(n int) [][]int {
 }
 
 func createSpiralStress(n int) int {
-	//                Right, Up, Left, Down
 	var dir = []tuple{{1, 0}, {0, 1}, {-1, 0}, {0, -1}}
 
 	size := int(math.Sqrt(float64(n)))
@@ -97,32 +95,15 @@ func createSpiralStress(n int) int {
 	return 0
 }
 
-//not the most elegant solution :-(
 func adjSum(field [][]int, x, y int) (sum int) {
-	maxIndex := len(field[0]) - 1
-	if x+1 <= maxIndex {
-		sum += field[x+1][y]
-	}
-	if y+1 <= maxIndex {
-		sum += field[x][y+1]
-	}
-	if x+1 <= maxIndex && y+1 <= maxIndex {
-		sum += field[x+1][y+1]
-	}
-	if x-1 >= 0 {
-		sum += field[x-1][y]
-	}
-	if x-1 >= 0 && y+1 <= maxIndex {
-		sum += field[x-1][y+1]
-	}
-	if y-1 >= 0 {
-		sum += field[x][y-1]
-	}
-	if y-1 >= 0 && x-1 >= 0 {
-		sum += field[x-1][y-1]
-	}
-	if y-1 >= 0 && x+1 <= maxIndex {
-		sum += field[x+1][y-1]
+	maxIndex := len(field[0])
+	vecs := []tuple{{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, -1}, {1, -1}, {-1, 1}}
+	for _, pair := range vecs {
+		x2, y2 := x+pair.x, y+pair.y
+		if x2 < maxIndex && x2 >= 0 &&
+			y2 < maxIndex && y2 >= 0 {
+			sum += field[x2][y2]
+		}
 	}
 	return sum
 }
