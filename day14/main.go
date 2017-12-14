@@ -11,10 +11,10 @@ func main() {
 	var input string
 	if len(args) != 2 {
 		input = "AoC2017"
-		fmt.Printf("Use: %s puzzleinput\n", string(args[0]))
+		fmt.Printf("Use: %s puzzleinput\n", args[0])
 		fmt.Printf("No Input was given will, use \"%s\" instead\n\n", input)
 	} else {
-		input = string(args[1])
+		input = args[1]
 	}
 	fmt.Printf("There are %d squares used.\n", defragWithKnot(input))
 	grid := buildGrid(input)
