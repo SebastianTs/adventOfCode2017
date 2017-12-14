@@ -64,8 +64,8 @@ func countRegions(m [][]bool) (res int) {
 		for j, bit := range row {
 			if bit && !seen[[2]int{i, j}] {
 				res++
-				q := make([][2]int, 0)
-				q = append(q, [2]int{i, j})
+				q := make([][2]int, 1)
+				q[0] = [2]int{i, j}
 				for len(q) > 0 {
 					seen[q[0]] = true
 					x, y := q[0][0], q[0][1]
