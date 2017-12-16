@@ -1,16 +1,3 @@
-
-Advent of Code
-
-    [About][AoC++][Events][Settings][Log Out]
-
-Sebastian 22*
-   <y>2017</y>
-
-    [Calendar][Leaderboard][Stats][Sponsors]
-
-Our sponsors help make Advent of Code possible:
-
-Xebia - Passionate consultants taking up IT challenges all year round
 --- Day 12: Digital Plumber ---
 
 Walking along the memory banks of the stream, you find a small village that is experiencing a little confusion: some programs can't communicate with each other.
