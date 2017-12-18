@@ -69,7 +69,7 @@ func process(ins [][]string) int64 {
 func processes(ins [][]string, id int, inC <-chan int, outC chan<- int) int {
 
 	regs := make(map[string]int)
-
+	regs["p"] = id
 	get := func(s string) int {
 		if strings.IndexAny(s, "0123456789") != -1 {
 			v, err := strconv.Atoi(s)
@@ -99,7 +99,6 @@ func processes(ins [][]string, id int, inC <-chan int, outC chan<- int) int {
 			select {
 			case regs[in[1]] = <-inC:
 			case <-time.After(1 * time.Second):
-				// return freq / 2
 				return freq
 			}
 		case "jgz":
@@ -108,7 +107,7 @@ func processes(ins [][]string, id int, inC <-chan int, outC chan<- int) int {
 			}
 		}
 	}
-	return freq / 2
+	return freq
 }
 
 func parseInput(file string) [][]string {
