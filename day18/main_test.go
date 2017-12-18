@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_process(t *testing.T) {
 	type args struct {
@@ -28,6 +30,34 @@ func Test_process(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := process(tt.args.ins); got != tt.want {
 				t.Errorf("process() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_processes(t *testing.T) {
+	tests := []struct {
+		name string
+		in   [][]string
+		want int
+	}{
+		{"example1", [][]string{
+			{"snd", "1"},
+			{"snd", "2"},
+			{"snd", "p"},
+			{"rcv", "a"},
+			{"rcv", "b"},
+			{"rcv", "c"},
+			{"rcv", "d"}}, 3},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			zeroToOneC := make(chan int, 1000)
+			oneToZeroC := make(chan int, 1000)
+
+			go processes(tt.in, 0, oneToZeroC, zeroToOneC)
+			if got := processes(tt.in, 1, zeroToOneC, oneToZeroC); got != tt.want {
+				t.Errorf("processes() = %v, want %v", got, tt.want)
 			}
 		})
 	}

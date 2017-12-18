@@ -99,7 +99,8 @@ func processes(ins [][]string, id int, inC <-chan int, outC chan<- int) int {
 			select {
 			case regs[in[1]] = <-inC:
 			case <-time.After(1 * time.Second):
-				return freq / 2
+				// return freq / 2
+				return freq
 			}
 		case "jgz":
 			if get(in[1]) > 0 {
