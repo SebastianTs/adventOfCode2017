@@ -10,7 +10,7 @@ import (
 func main() {
 	input := parseInput("./input")
 	result, steps := maze(input)
-	fmt.Printf("%s %d\n", result, steps)
+	fmt.Printf("The letters on the path were %s\nIt took %d steps.\n", result, steps)
 
 }
 
