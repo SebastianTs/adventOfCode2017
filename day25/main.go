@@ -4,77 +4,77 @@ import "fmt"
 
 func main() {
 
-	state := 0
+	state := 'A'
 	slot := 0
-	tape := make(map[int]int)
+	tape := make(map[int]bool)
 
 	for steps := 12656374; steps > 0; steps-- {
 		switch state {
-		case 0:
-			if tape[slot] == 0 {
-				tape[slot] = 1
+		case 'A':
+			if !tape[slot] {
+				tape[slot] = true
 				slot++
-				state = 1
-			} else if tape[slot] == 1 {
-				tape[slot] = 0
+				state = 'B'
+			} else {
+				tape[slot] = false
 				slot--
-				state = 2
+				state = 'C'
 			}
-		case 1:
-			if tape[slot] == 0 {
-				tape[slot] = 1
+		case 'B':
+			if !tape[slot] {
+				tape[slot] = true
 				slot--
-				state = 0
-			} else if tape[slot] == 1 {
-				tape[slot] = 1
+				state = 'A'
+			} else {
+				tape[slot] = true
 				slot--
-				state = 3
+				state = 'D'
 			}
-		case 2:
-			if tape[slot] == 0 {
-				tape[slot] = 1
+		case 'C':
+			if !tape[slot] {
+				tape[slot] = true
 				slot++
-				state = 3
-			} else if tape[slot] == 1 {
-				tape[slot] = 0
+				state = 'D'
+			} else {
+				tape[slot] = false
 				slot++
-				state = 2
+				state = 'C'
 			}
-		case 3:
-			if tape[slot] == 0 {
-				tape[slot] = 0
+		case 'D':
+			if !tape[slot] {
+				tape[slot] = false
 				slot--
-				state = 1
-			} else if tape[slot] == 1 {
-				tape[slot] = 0
+				state = 'B'
+			} else {
+				tape[slot] = false
 				slot++
-				state = 4
+				state = 'E'
 			}
-		case 4:
-			if tape[slot] == 0 {
-				tape[slot] = 1
+		case 'E':
+			if !tape[slot] {
+				tape[slot] = true
 				slot++
-				state = 2
-			} else if tape[slot] == 1 {
-				tape[slot] = 1
+				state = 'C'
+			} else {
+				tape[slot] = true
 				slot--
-				state = 5
+				state = 'F'
 			}
-		case 5:
-			if tape[slot] == 0 {
-				tape[slot] = 1
+		case 'F':
+			if !tape[slot] {
+				tape[slot] = true
 				slot--
-				state = 4
-			} else if tape[slot] == 1 {
-				tape[slot] = 1
+				state = 'E'
+			} else {
+				tape[slot] = true
 				slot++
-				state = 0
+				state = 'A'
 			}
 		}
 	}
 	counter := 0
 	for _, v := range tape {
-		if v == 1 {
+		if v {
 			counter++
 		}
 	}
